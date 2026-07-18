@@ -1,9 +1,11 @@
 import sys
 from pathlib import Path
 
+# Get project root
 PROJECT_ROOT = Path(__file__).resolve().parent
-sys.path.append(str(PROJECT_ROOT))
+sys.path.insert(0, str(PROJECT_ROOT))
 
+# Now import
 from backend.query_router.router import answer_question
 
 import streamlit as st
