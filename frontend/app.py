@@ -1,23 +1,17 @@
-import sys
-import os
 
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-
-
-from __future__ import annotations
 
 import sys
 from pathlib import Path
-
-import pandas as pd
-import plotly.express as px
-import streamlit as st
-
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.append(str(PROJECT_ROOT))
+
+import streamlit as st
+import pandas as pd
+import plotly.express as px
+
 
 
 from backend.query_router.router import answer_question  # noqa: E402
