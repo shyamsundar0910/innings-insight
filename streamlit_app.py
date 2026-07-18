@@ -26,9 +26,57 @@ st.set_page_config(
 )
 
 
-def create_chart(intent: str, table: pd.DataFrame):
-    """Create Plotly chart based on detected intent."""
-    if table.empty:
+def create_chart(intent, table):
+    import plotly.express as px   # ✅ move import inside function
+
+    if table is None or table.empty:
+        return None
+
+    try:
+        if intent == "average_first_innings":
+            return px.bar(
+                table,
+                x="venue",
+                y="average_first_innings_score",
+                title="Average First Innings Score by Venue"
+            )
+
+        elif intent == "highest_scorers":
+            return px.bar(
+                table.head(10),
+                x="batsman",
+                y="total_runs",
+                title="Top Run Scorers"
+            )
+
+        elif intent == "best_strike_rate":
+            return px.bar(
+                table.head(10),
+                x="batsman",
+                y="strike_rate",
+                title="Best Strike Rate"
+            )
+
+        elif intent == "best_economy":
+            return px.bar(
+                table.head(10),
+                x="bowler",
+                y="economy",
+                title="Best Economy Bowlers"
+            )
+
+        elif intent == "most_wickets":
+            return px.bar(
+                table.head(10),
+                x="bowler",
+                y="wickets",
+                title="Most Wickets"
+            )
+
+        else:
+            return None
+
+    except Exception as e:
         return None
 
     if intent == "highest_run_scorers":
