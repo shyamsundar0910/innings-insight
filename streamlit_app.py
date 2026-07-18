@@ -1,12 +1,12 @@
-from __future__ import annotations
-
 import sys
 from pathlib import Path
 
-import pandas as pd
-import plotly.express as px
-import streamlit as st
+PROJECT_ROOT = Path(__file__).resolve().parent
+sys.path.append(str(PROJECT_ROOT))
 
+from backend.query_router.router import answer_question
+
+import streamlit as st
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 
