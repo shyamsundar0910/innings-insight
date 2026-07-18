@@ -2,38 +2,39 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 
+from backend.query_router.router import answer_question
+
 # -------------------------------
 # PAGE CONFIG
 # -------------------------------
 st.set_page_config(page_title="Innings Insight", layout="wide")
 
-# -------------------------------
-# TITLE
-# -------------------------------
 st.title("🏏 Innings Insight")
 st.subheader("Natural Language Cricket Analytics Platform")
 
 st.write("Ask cricket analytics questions in plain English.")
 
 # -------------------------------
-# SAMPLE DATA (Replace later with real dataset)
+# SAMPLE QUESTIONS
 # -------------------------------
-data = {
-    "venue": ["Wankhede Stadium"],
-    "average_first_innings_score": [173.13],
-    "innings_count": [132],
-    "highest_score": [243],
-    "lowest_score": [67]
-}
+st.sidebar.header("Sample Questions")
 
-df = pd.DataFrame(data)
+sample_questions = [
+    "What is the average first innings score at Wankhede?",
+    "Who are the highest run scorers?",
+    "Who has the best strike rate?",
+    "Who has taken the most wickets?",
+    "Compare V Kohli and RG Sharma"
+]
+
+selected_question = st.sidebar.radio("Try one:", sample_questions)
 
 # -------------------------------
 # INPUT
 # -------------------------------
 question = st.text_input(
     "Ask a cricket question:",
-    "What is the average first innings score at Wankhede?"
+    selected_question
 )
 
 # -------------------------------
@@ -41,44 +42,59 @@ question = st.text_input(
 # -------------------------------
 if st.button("Analyze"):
 
-    # Simulated answer (replace with backend later)
-    answer = (
-        "Wankhede Stadium has been a high-scoring first-innings venue, "
-        "with an average of 173.13 across 132 innings."
-    )
+    with st.spinner("Analyzing your question..."):
 
-    st.markdown("## Answer")
-    st.success(answer)
+        result = answer_question(question)
 
-    # -------------------------------
-    # METRIC
-    # -------------------------------
-    st.markdown("### Average First Innings Score")
-    st.metric(label="Score", value=173.13)
+        # -------------------------------
+        # ANSWER
+        # -------------------------------
+        st.markdown("## Answer")
+        st.success(result["answer"])
 
-    # -------------------------------
-    # TABLE
-    # -------------------------------
-    st.markdown("### Supporting Table")
-    st.dataframe(df)
+        # -------------------------------
+        # TABLE
+        # -------------------------------
+        df = result.get("table", pd.DataFrame())
 
-    # -------------------------------
-    # CHART
-    # -------------------------------
-    st.markdown("### Visualization")
+        if not df.empty:
+            st.markdown("### Supporting Table")
+            st.dataframe(df)
 
-    chart = px.bar(
-        df,
-        x="venue",
-        y="average_first_innings_score",
-        title="Average First Innings Score by Venue"
-    )
+            # -------------------------------
+            # CHART
+            # -------------------------------
+            st.markdown("### Visualization")
 
-    if chart:
-        st.plotly_chart(chart)
+            try:
+                if "venue" in df.columns:
+                    chart = px.bar(
+                        df,
+                        x="venue",
+                        y=df.columns[1],
+                        title="Venue Analysis"
+                    )
 
-    # -------------------------------
-    # INSIGHT
-    # -------------------------------
-    st.markdown("### Insight")
-    st.info(answer)
+                elif "player" in df.columns:
+                    chart = px.bar(
+                        df.head(10),
+                        x="player",
+                        y=df.columns[1],
+                        title="Player Performance"
+                    )
+
+                else:
+                    chart = None
+
+                if chart:
+                    st.plotly_chart(chart)
+
+            except Exception:
+                st.warning("Chart could not be generated.")
+
+        # -------------------------------
+        # INSIGHT
+        # -------------------------------
+        if result.get("insight"):
+            st.markdown("### Insight")
+            st.info(result["insight"])
