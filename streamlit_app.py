@@ -141,6 +141,25 @@ if analyze:
 
                 if chart:
                     st.plotly_chart(chart, use_container_width=True)
+                    # -------------------------------
+# VISUALIZATION
+# -------------------------------
+st.markdown("### 📈 Visualization")
+
+try:
+    chart = None
+
+    if "venue" in df.columns:
+        chart = px.bar(...)
+
+    elif "player" in df.columns:
+        chart = px.bar(...)
+
+    if chart:
+        st.plotly_chart(chart, use_container_width=True)
+
+except Exception:
+    st.warning("Chart could not be generated.")
 
             except Exception:
                 st.warning("Chart could not be generated.")
