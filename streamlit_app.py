@@ -319,6 +319,8 @@ def main() -> None:
                 st.dataframe(table, use_container_width=True)
 
             chart = create_chart(intent, table)
+            if chart:
+    st.plotly_chart(chart)
 
             if chart is not None:
                 st.markdown("### Visualization")
