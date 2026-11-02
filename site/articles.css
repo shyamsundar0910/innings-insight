@@ -1,0 +1,13 @@
+/* Latest Substack articles */
+.articles-section{background:var(--paper-2);border-block:1px solid var(--line)}
+.articles-intro{color:var(--muted);margin:-12px 0 26px}
+.articles-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.article-preview{background:var(--white);border:1px solid var(--line);display:flex;flex-direction:column;overflow:hidden;min-width:0;transition:transform .18s ease,box-shadow .18s ease}
+.article-preview:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(16,34,27,.07)}
+.article-preview-cover{aspect-ratio:16/9;object-fit:cover;width:100%;background:var(--green-2)}
+.article-preview-body{display:flex;flex-direction:column;flex:1;padding:24px;gap:12px}
+.article-preview h3{font-size:1.65rem;line-height:1.15}
+.article-preview p{font-size:.93rem;line-height:1.6;color:var(--muted);margin:0 0 12px}
+.article-preview .card-link{padding-top:8px}
+@media(max-width:900px){.articles-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:620px){.articles-grid{grid-template-columns:1fr}}
